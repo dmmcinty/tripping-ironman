@@ -1,0 +1,71 @@
+(define (getValue Pair)
+	(car Pair)
+)
+
+(define (getCount Pair)
+	(cadr Pair)
+)
+
+(define (newPair Item)
+	(cons Item '(1))
+)
+
+(define (incPair Pair)
+	(cons
+		(car Pair)
+		(+ 1 (cadr Pair) )
+	)
+)
+
+(define (decPair Pair)
+	(if (= 0 (cadrPair))
+		()
+		(cons
+			(car Pair)
+			(- (cadr Pair) 1 )
+		)
+	)
+)
+
+(define (insertBag List Item)
+	(if (null? List)
+		(cons
+			List
+			(newPair Item)
+		)
+		(if (eq? Item (car List)) 
+			(incPair (car List))
+			(insertBag (cdr List) Item)
+		)
+	)
+)
+
+(define (getBagCount List Item)
+	(if (null? List)
+		List
+		(if (eq? Item (car List))
+			(getCount List)
+			(getBagCount (cdr List) Item)
+		)
+	)
+)
+
+(define (deleteBag List Item)
+	(if (null? List)
+		List
+		(if (eq? Item (car List))
+			(decPair List)
+			(deleteBag (cdr List) Item)
+		)
+	)	
+)
+
+(define (deleteAllBag List Item)
+	(if (null? List)
+		List
+		(if (eq? Item (car List))
+			(decPair List)
+			(deleteBag (cdr List) Item)
+		)
+	)	
+)
