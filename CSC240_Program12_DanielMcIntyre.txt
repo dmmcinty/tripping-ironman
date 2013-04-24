@@ -1,16 +1,61 @@
 (define (DMMStartGame)
-	(begin
-		(write Starting... \n)
-		(set! (DMMGame '( (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) ) ) )
-		#t
-	)
+	(display Starting...\n)
+	(set! (DMMGame '( (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) ) ) )
+	#t
 	
 )
 
 (define (DMMMarkMove column)
-	(begin 
-		(set! 
-			(DMMGame)
+	(cond 	( (= (getCell DMMGame 1 column) 0 )
+				(set! 
+					DMMGame
+					(setCell DMMGame 1 column 1)
+				)
+			)
+			
+			( (= (getCell DMMGame 2 column) 0 )
+				(set! 
+					DMMGame
+					(setCell DMMGame 2 column 1)
+				)
+			)
+			
+			( (= (getCell DMMGame 3 column) 0 )
+				(set! 
+					DMMGame
+					(setCell DMMGame 3 column 1)
+				)
+			)
+			
+			( (= (getCell DMMGame 4 column) 0 )
+				(set! 
+					DMMGame
+					(setCell DMMGame 4 column 1)
+				)
+			)
+			
+			( (= (getCell DMMGame 5 column) 0 )
+				(set! 
+					DMMGame
+					(setCell DMMGame 5 column 1)
+				)
+			)
+			
+			( (= (getCell DMMGame 6 column) 0 )
+				(set! 
+					DMMGame
+					(setCell DMMGame 6 column 1)
+				)
+			)
+			
+			( (= (getCell DMMGame 7 column) 0 )
+				(set! 
+					DMMGame
+					(setCell DMMGame 7 column 1)
+				)
+			)
+		
+	)
 			
 )
 
@@ -19,7 +64,10 @@
 )
 
 (define (DMMMakeMove)
-
+	(+
+		1
+		(random 7)
+	)
 )
 
 (define (DMMLegalMoveP column)
@@ -34,8 +82,7 @@
 
 )
 
-(define (DMMGame board)
-	board
+(define (DMMGame)
 )
 
 ;**********************************************************
