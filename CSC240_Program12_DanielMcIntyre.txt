@@ -53,7 +53,7 @@
 ; This function navigates through a matrix until
 ; the given position is found, using recursion to trim 
 ; the list until the given position is reached. When the 
-; correct position is reached, the car of the list as it is
+; position is reached, the car of the list as it is
 ; is returned.
 ;**********************************************************
 
