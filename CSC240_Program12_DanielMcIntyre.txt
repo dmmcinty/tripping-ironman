@@ -1,0 +1,118 @@
+(define (DMMStartGame)
+	(begin
+		(write Starting... \n)
+		(set! (DMMGame '( (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) ) ) )
+		#t
+	)
+	
+)
+
+(define (DMMMarkMove column)
+	(begin 
+		(set! 
+			(DMMGame)
+			
+)
+
+(define (DMMShowGame)
+	
+)
+
+(define (DMMMakeMove)
+
+)
+
+(define (DMMLegalMoveP column)
+
+)
+
+(define (DMMWinP column)
+
+)
+
+(define (DMMWillWinP)
+
+)
+
+(define (DMMGame board)
+	board
+)
+
+;**********************************************************
+; Author: Daniel McIntyre
+; Class: CSC 240 MW 5:20 - 7
+; Description: Program 12 Phase 1
+;				Consists of two main fuctions used to 
+;               manipulate a matrix, getCell & setCell.
+;				columnSet is a helper function designed 
+;				to make setCell easier to read and follow.
+;**********************************************************
+
+
+; getCell *************************************************
+; This function navigates through a matrix until
+; the given position is found, using recursion to trim 
+; the list until the given position is reached. When the 
+; correct position is reached, the car of the list as it is
+; is returned.
+;**********************************************************
+
+(define (getCell Matrix Row Column)
+	(cond	( 	(null? Matrix) 
+					() 
+			)
+			
+			( 	(> Row 1) 
+					(getCell (cdr Matrix) (- Row 1) Column) 
+			)
+			
+			( 	(= Row 1) 
+					(getCell (car Matrix) (- Row 1) Column)  
+			)
+			
+			( 	(> Column 1) 
+					(getCell (cdr Matrix) Row (- Column 1) ) 
+			)
+			
+			( 	(= Column 1)
+					(car Matrix)
+			)
+	)
+)
+
+; setCell *************************************************
+; This function works by creating a new matrix until the 
+; row of the item to be replaced is reached. Then 
+; columnSet is called to create a new row and combine
+; it with the remainder of the matrix, where it is in turn 
+; combined with the beginning of matrix.
+;**********************************************************
+
+(define (setCell Matrix Row Column Item)
+	(if (= Row 1)
+		(cons
+			(columnSet (car Matrix) Column Item)
+			(cdr Matrix)
+		)
+		(cons
+			(car Matrix)
+			(setCell (cdr Matrix) (- Row 1) Column Item)
+		)
+	)
+)
+
+; columnSet ***********************************************
+
+(define (columnSet List Position Item)
+	(if (= Position 1)
+		(cons
+			Item
+			(cdr List)
+		)
+		(cons
+			(car List)
+			(columnSet (cdr List) (- Position 1) Item)
+		)
+	)
+)
+
