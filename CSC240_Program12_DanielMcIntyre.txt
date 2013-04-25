@@ -1,62 +1,15 @@
 (define (DMMStartGame)
-	(display Starting...\n)
-	(set! (DMMGame '( (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0 0) ) ) )
+	(display "Starting...\n")
+	(set! DMMGame '( (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0 ) ) ) 
 	#t
 	
 )
 
-(define (DMMMarkMove column)
-	(cond 	( (= (getCell DMMGame 1 column) 0 )
-				(set! 
-					DMMGame
-					(setCell DMMGame 1 column 1)
-				)
-			)
-			
-			( (= (getCell DMMGame 2 column) 0 )
-				(set! 
-					DMMGame
-					(setCell DMMGame 2 column 1)
-				)
-			)
-			
-			( (= (getCell DMMGame 3 column) 0 )
-				(set! 
-					DMMGame
-					(setCell DMMGame 3 column 1)
-				)
-			)
-			
-			( (= (getCell DMMGame 4 column) 0 )
-				(set! 
-					DMMGame
-					(setCell DMMGame 4 column 1)
-				)
-			)
-			
-			( (= (getCell DMMGame 5 column) 0 )
-				(set! 
-					DMMGame
-					(setCell DMMGame 5 column 1)
-				)
-			)
-			
-			( (= (getCell DMMGame 6 column) 0 )
-				(set! 
-					DMMGame
-					(setCell DMMGame 6 column 1)
-				)
-			)
-			
-			( (= (getCell DMMGame 7 column) 0 )
-				(set! 
-					DMMGame
-					(setCell DMMGame 7 column 1)
-				)
-			)
-		
+(define (DMMMarkMove Column)
+	(set!
+		DMMGame
+		(setCell DMMGame  (DMMRowReturn Column) Column 1)
 	)
-			
 )
 
 (define (DMMShowGame)
@@ -64,26 +17,179 @@
 )
 
 (define (DMMMakeMove)
-	(+
-		1
-		(random 7)
+	(cond 
+		( (DMMMPlayingFirst) 4)
+		( (DMMWillWinP 1)  1 )
+		( (DMMWillWinP 2)  2 )
+		( (DMMWillWinP 3)  3 )
+		( (DMMWillWinP 4)  4 )
+		( (DMMWillWinP 5)  5 )
+		( (DMMWillWinP 6)  6 )
+		( (DMMWillWinP 7)  7 )
+		( #t (+ 1 (random 7) ) )
 	)
 )
 
-(define (DMMLegalMoveP column)
-
+(define (DMMLegalMoveP Column)
+	(if (null? DMMReturnRow Column)
+		#f
+		#t
+	)
 )
 
-(define (DMMWinP column)
-
+(define (DMMWinP Column)
+	(cond 
+		( (DMMWinHoriz (DMMRowReturn Column) Column 0) 
+			#t
+			#f
+		)
+		((DMMWinUpDiag (DMMRowReturn Column) Column 0)
+			#t
+			#f
+		)
+		((DMMWinVert (DMMRowReturn Column) Column 0)
+			#t
+			#f
+		)
+		((DMMWinDownDiag (DMMRowReturn Column) Column 0)
+			#t
+			#f
+		)
+	)
 )
 
-(define (DMMWillWinP)
+(define (DMMWillWinP Column)
 
 )
 
 (define (DMMGame)
 )
+
+(define (DMMWinVert Row Column Count)
+	(cond 
+		( 	(= Count 0) #t )
+		
+		( 	(eq? 
+				(getCell DMMGame Row Column)
+				(getCell DMMGame (- Row 1) Column)
+			) 
+			(DMMWinVert DMMGame (- Row 1) Column (- Count 1) )
+		)
+		
+		(#t #f)
+	)
+)
+
+(define (DMMWinHoriz Row Column Count)
+	(cond 
+		(	(= Count 4) #t )
+		
+		( 	(eq? 
+				(getCell DMMGame Row Column)
+				(getCell DMMGame Row (- Column 1) )
+			)
+				(DMMWinHoriz Row (- Column 1) (+ 1 Count) )
+		)
+		
+		( (= Count 3) (DMMWinHoriz Row (+ Column 3) Count ) )
+		
+		( (= Count 2) (DMMWinHoriz Row (+ Column 2) Count ) )
+		
+		( (= Count 1) (DMMWinHoriz Row (+ Column 1) Count ) )
+		
+		(#t #f)
+		
+	)
+) 
+
+(define (DMMWinUpDiag Row Column Count)
+	(cond 
+		(	(= Count 4) #t )
+		
+		( 	(eq? 
+				(getCell DMMGame Row Column)
+				(getCell DMMGame (- Row 1) (- Column 1) )
+			)
+				(DMMWinHoriz (- Row 1) (- Column 1) (+ 1 Count) )
+		)
+		
+		( (= Count 3) (DMMWinUpDiag (+ Row 3) (+ Column 3) Count ) )
+		
+		( (= Count 2) (DMMWinUpDiag (+ Row 2) (+ Column 2) Count ) )
+		
+		( (= Count 1) (DMMWinUpDiag (+ Row 1) (+ Column 1) Count ) )
+		
+		(#t #f)
+		
+	)
+) 
+
+(define (DMMWinDownDiag Row Column Count)
+	(cond 
+		(	(= Count 4) #t )
+		
+		( 	(eq? 
+				(getCell DMMGame Row Column)
+				(getCell DMMGame (+ Row 1) (- Column 1) )
+			)
+				(DMMWinDownDiag (+ Row 1) (- Column 1) (+ 1 Count) )
+		)
+		
+		( (= Count 3) (DMMWinDownDiag (- Row 3) (+ Column 3) Count ) )
+		
+		( (= Count 2) (DMMWinDownDiag (- Row 2) (+ Column 2) Count ) )
+		
+		( (= Count 1) (DMMWinDownDiag (- Row 1) (+ Column 1) Count ) )
+		
+		(#t #f)
+		
+	)
+) 
+
+(define (DMMRowReturn Column)
+	(cond 	
+		( (eq? (getCell DMMGame 1 Column) 0 )
+			1
+		)
+		
+		( (eq? (getCell DMMGame 2 Column) 0 )
+			2
+		)
+		
+		( (eq? (getCell DMMGame 3 Column) 0 )
+			3
+		)
+		
+		( (eq? (getCell DMMGame 4 Column) 0 )
+			4
+		)
+		
+		( (eq? (getCell DMMGame 5 Column) 0 )
+			5
+		)
+		
+		( (eq? (getCell DMMGame 6 Column) 0 )
+			6
+		)
+		
+		( (eq? (getCell DMMGame 7 Column) 0 )
+			7
+		)
+		
+		( #t '() )
+	)
+)
+
+(define (DMMPlayingFirst)
+	(if (eq?	
+			DMMGame 
+			'( (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0) (0 0 0 0 0 0 0 ) ) 
+		)
+		#t
+		#f
+	)
+)
+
 
 ;**********************************************************
 ; Author: Daniel McIntyre
@@ -91,7 +197,7 @@
 ; Description: Program 12 Phase 1
 ;				Consists of two main fuctions used to 
 ;               manipulate a matrix, getCell & setCell.
-;				columnSet is a helper function designed 
+;				ColumnSet is a helper function designed 
 ;				to make setCell easier to read and follow.
 ;**********************************************************
 
@@ -113,7 +219,7 @@
 					(getCell (cdr Matrix) (- Row 1) Column) 
 			)
 			
-			( 	(= Row 1) 
+			( 	(eq? Row 1) 
 					(getCell (car Matrix) (- Row 1) Column)  
 			)
 			
@@ -121,7 +227,7 @@
 					(getCell (cdr Matrix) Row (- Column 1) ) 
 			)
 			
-			( 	(= Column 1)
+			( 	(eq? Column 1)
 					(car Matrix)
 			)
 	)
@@ -130,15 +236,15 @@
 ; setCell *************************************************
 ; This function works by creating a new matrix until the 
 ; row of the item to be replaced is reached. Then 
-; columnSet is called to create a new row and combine
+; ColumnSet is called to create a new row and combine
 ; it with the remainder of the matrix, where it is in turn 
 ; combined with the beginning of matrix.
 ;**********************************************************
 
 (define (setCell Matrix Row Column Item)
-	(if (= Row 1)
+	(if (eq? Row 1)
 		(cons
-			(columnSet (car Matrix) Column Item)
+			(ColumnSet (car Matrix) Column Item)
 			(cdr Matrix)
 		)
 		(cons
@@ -148,17 +254,17 @@
 	)
 )
 
-; columnSet ***********************************************
+; ColumnSet ***********************************************
 
-(define (columnSet List Position Item)
-	(if (= Position 1)
+(define (ColumnSet List Position Item)
+	(if (eq? Position 1)
 		(cons
 			Item
 			(cdr List)
 		)
 		(cons
 			(car List)
-			(columnSet (cdr List) (- Position 1) Item)
+			(ColumnSet (cdr List) (- Position 1) Item)
 		)
 	)
 )
